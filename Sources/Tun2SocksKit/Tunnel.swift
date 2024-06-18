@@ -50,10 +50,17 @@ public enum Socks5Tunnel {
         }
         return nil
     }
-    
-    public static func run(withConfig config: Config, completionHandler: @escaping (Int32) -> ()) {
+
+    public static func run(withConfig config: String, completionHandler: @escaping (Int32) -> ()) {
         DispatchQueue.global(qos: .userInitiated).async { [completionHandler] () in
-            let code: Int32 = Socks5Tunnel.run(withConfig: config)
+            let code: Int32 = Socks5Tunnel.run(withConfig: .string(content: config))
+            completionHandler(code)
+        }
+    }
+    
+    public static func run(withConfig config: URL, completionHandler: @escaping (Int32) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [completionHandler] () in
+            let code: Int32 = Socks5Tunnel.run(withConfig: .file(path: config))
             completionHandler(code)
         }
     }
